@@ -2,7 +2,7 @@
 
 var model = {
   selectedCat: 0,
-  catNames: ['ikki','sammy','mia','licota','meg'],
+  catNames: ['ikki','sammy','mia','licota','meg','pity','tuty','bobona'],
   cats: [],
 };
 
@@ -12,7 +12,7 @@ var octopus = {
 
   init: function(){
     // fetch images from unsplash
-    fetch(`https://api.unsplash.com/search/photos?page=1&query=kitten`, {
+    fetch(`https://api.unsplash.com/search/photos?page=1&query=cat`, {
       headers: {
         Authorization: 'Client-ID 28bef4c545a23c2aebbbb975c8b1d89fbe979f2c0917a7f01e5346b6eb2974d7'
       }
