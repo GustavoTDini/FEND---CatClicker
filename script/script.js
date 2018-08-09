@@ -45,7 +45,7 @@ var octopus = {
   // increments the counter for the currently-selected cat
   incrementCounter: function() {
     model.cats[model.selectedCat].clickCounter++;
-    catView.addCatInfo();
+    catView.incrementInfoCounter();
     catListView.incrementList();
   },
 
@@ -79,7 +79,12 @@ var catView = {
     </figure>`
 
     $("#cat_images").html(htmlImageInfo);
+  },
+
+  incrementInfoCounter: function(){
+    $("#click_number").text(model.cats[model.selectedCat].clickCounter);
   }
+
 };
 
 var catListView = {
@@ -94,12 +99,12 @@ var catListView = {
     $("#list").append(htmlListInfo);
     for (let i = 0; i < model.cats.length; i++){
       htmlListInfo =
-      `<tr id="cat-list${i}">
+      `<tr id="cat_list${i}">
       <td>${model.cats[i].name}</td>
       <td class="counter cat${i}">${model.cats[i].clickCounter}</td>
       </tr>`
       $("#list").append(htmlListInfo);
-      $("#cat-list" + i).bind('click', function(catCopy) {
+      $("#cat_list" + i).bind('click', function(catCopy) {
         return function() {
           octopus.setSelectedCat(catCopy);
         };
