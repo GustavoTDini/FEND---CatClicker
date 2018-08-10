@@ -47,6 +47,8 @@ var octopus = {
     model.cats[model.selectedCat].name = name;
     model.cats[model.selectedCat].clickCounter = counter;
     model.cats[model.selectedCat].image = image;
+    catListView.changeCatValues();
+    catView.addCatInfo();
   },
 
   // increments the counter for the currently-selected cat
@@ -107,13 +109,14 @@ var catListView = {
     for (let i = 0; i < model.cats.length; i++){
       htmlListInfo =
       `<tr id="cat_list${i}">
-      <td>${model.cats[i].name}</td>
+      <td class="cat_name${i}">${model.cats[i].name}</td>
       <td class="counter cat${i}">${model.cats[i].clickCounter}</td>
       </tr>`
       $("#list").append(htmlListInfo);
       $("#cat_list" + i).bind('click', function(catCopy) {
         return function() {
           octopus.setSelectedCat(catCopy);
+          catAdminView.empty();
         };
       }(i));
     }
@@ -121,6 +124,11 @@ var catListView = {
 
   incrementList: function(){
     $(".cat" + model.selectedCat).text(model.cats[model.selectedCat].clickCounter);
+  },
+
+  changeCatValues: function(){
+    $(".cat" + model.selectedCat).text(model.cats[model.selectedCat].clickCounter);
+    $(".cat_name" + model.selectedCat).text(model.cats[model.selectedCat].name);
   }
 
 };
@@ -132,10 +140,23 @@ var catAdminView = {
     catAdminView.empty();
 
     $("#admin_button").click(function(){
-      if ($("#admin_form").is(":empty")){
-        catAdminView.render();
-      }
+      catAdminView.render();
     });
+
+  },
+
+  render: function() {
+    htmlAdminInfo =
+    `Gato<br>
+    <input type="text" id="fName" value="${model.cats[model.selectedCat].name}" autocomplete='Cat Name'>
+    <br>Cliques<br>
+    <input type="text" id="fClicks" value="${model.cats[model.selectedCat].clickCounter}" autocomplete='Cat clicks'>
+    <br>Image URL<br>
+    <input type="text" id="fUrl" value="${model.cats[model.selectedCat].image}" autocomplete='Cat Image Url'>
+    <button id="save_button">Save</button>
+    <button id="cancel_button">Cancel</button>`
+    $("#admin_form").append(htmlAdminInfo);
+    $("#admin_button").hide();
 
     $("#save_button").click(function(){
       catAdminView.getValues();
@@ -147,22 +168,9 @@ var catAdminView = {
     });
   },
 
-  render: function() {
-    console.log("Admin");
-    htmlAdminInfo =
-    `Gato<br>
-    <input type="text" id="fName" value="${model.cats[model.selectedCat].name}" autocomplete='Cat Name'>
-    <br>Cliques<br>
-    <input type="text" id="fClicks" value="${model.cats[model.selectedCat].clickCounter}" autocomplete='Cat clicks'>
-    <br>Image URL<br>
-    <input type="text" id="fUrl" value="${model.cats[model.selectedCat].image}" autocomplete='Cat Image Url'>
-    <button id="save_button">Save</button>
-    <button id="cancel_button">Cancel</button>`
-    $("#admin_form").append(htmlAdminInfo);
-  },
-
   empty: function(){
     $("#admin_form").empty();
+    $("#admin_button").show();
   },
 
   getValues: function(){
@@ -172,6 +180,7 @@ var catAdminView = {
     catImage = $("#fUrl").val();
     console.log(catName);
     octopus.saveCatInfo(catName, catCounter, catImage);
+    console.log(model.cats[model.selectedCat]);
   }
 
 };
