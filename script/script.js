@@ -35,11 +35,18 @@ var octopus = {
   startViews: function(){
     catListView.init();
     catView.init();
+    catAdminView.init();
   },
 
   setSelectedCat: function(selection){
     model.selectedCat = selection;
     catView.addCatInfo();
+  },
+
+  saveCatInfo: function(name, counter, image){
+    model.cats[model.selectedCat].name = name;
+    model.cats[model.selectedCat].clickCounter = counter;
+    model.cats[model.selectedCat].image = image;
   },
 
   // increments the counter for the currently-selected cat
@@ -114,6 +121,57 @@ var catListView = {
 
   incrementList: function(){
     $(".cat" + model.selectedCat).text(model.cats[model.selectedCat].clickCounter);
+  }
+
+};
+
+var catAdminView = {
+
+  init: function() {
+
+    catAdminView.empty();
+
+    $("#admin_button").click(function(){
+      if ($("#admin_form").is(":empty")){
+        catAdminView.render();
+      }
+    });
+
+    $("#save_button").click(function(){
+      catAdminView.getValues();
+      catAdminView.empty();
+    });
+
+    $("#cancel_button").click(function(){
+      catAdminView.empty();
+    });
+  },
+
+  render: function() {
+    console.log("Admin");
+    htmlAdminInfo =
+    `Gato<br>
+    <input type="text" id="fName" value="${model.cats[model.selectedCat].name}" autocomplete='Cat Name'>
+    <br>Cliques<br>
+    <input type="text" id="fClicks" value="${model.cats[model.selectedCat].clickCounter}" autocomplete='Cat clicks'>
+    <br>Image URL<br>
+    <input type="text" id="fUrl" value="${model.cats[model.selectedCat].image}" autocomplete='Cat Image Url'>
+    <button id="save_button">Save</button>
+    <button id="cancel_button">Cancel</button>`
+    $("#admin_form").append(htmlAdminInfo);
+  },
+
+  empty: function(){
+    $("#admin_form").empty();
+  },
+
+  getValues: function(){
+    let catName, catCounter, catImage;
+    catName = $("#fName").val();
+    catCounter = $("#fClicks").val();
+    catImage = $("#fUrl").val();
+    console.log(catName);
+    octopus.saveCatInfo(catName, catCounter, catImage);
   }
 
 };
